@@ -7,7 +7,6 @@ Registra eventos de mantenimiento con sus costos y tiempos.
 
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
-from pyspark.sql.window import Window
 
 
 def build_fact_maintenance(
@@ -85,7 +84,10 @@ def build_fact_maintenance(
     # performed_by contiene 'Technician X', extraemos el número para mapear con operator_id
     logs = logs.withColumn(
         "technician_id_extracted",
-        F.regexp_extract(F.col("performed_by"), r"(\d+)", 1).cast("long"),
+        F.when(
+            F.col("performed_by").rlike(r"\d+"),
+            F.regexp_extract(F.col("performed_by"), r"(\d+)", 1).cast("long"),
+        ).otherwise(F.lit(None).cast("long")),
     )
 
     logs = logs.join(
@@ -98,8 +100,7 @@ def build_fact_maintenance(
     )
 
     # Generar SK para el fact
-    window = Window.orderBy("log_id")
-    logs = logs.withColumn("maintenance_sk", F.row_number().over(window))
+    logs = logs.withColumn("maintenance_sk", F.monotonically_increasing_id())
 
     # Seleccionar columnas finales según el esquema
     return logs.select(
