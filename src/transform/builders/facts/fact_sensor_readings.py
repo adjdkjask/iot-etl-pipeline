@@ -34,7 +34,7 @@ def build_fact_sensor_readings(
     Returns:
         DataFrame con fact_sensor_readings
     """
-    # Normalizar timestamp (en silver viene indicar como string)
+    # Normalizar timestamp (en silver viene como string)
     readings = sensor_readings_df.withColumn(
         "timestamp_ts", F.to_timestamp(F.col("timestamp"))
     )
