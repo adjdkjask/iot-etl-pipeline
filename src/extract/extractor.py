@@ -15,9 +15,9 @@ class Extractor:
     dentro del flujo ETL.
     """
 
-    def __init__(self):
-        self.client = RequestsHttpClient(url=get_api_url())
-        self.storage = RawStorage(base_path=RAW_DATA_DIR)
+    def __init__(self, http_client: RequestsHttpClient, storage: RawStorage):
+        self.client = http_client
+        self.storage = storage
 
     def extract(self) -> Dict[str, Path]:
         """
@@ -51,5 +51,7 @@ class Extractor:
 if __name__ == "__main__":
     from config.path_config import RAW_DATA_DIR, get_api_url
 
-    extractor = Extractor()
+    http_client = RequestsHttpClient(url=get_api_url())
+    storage = RawStorage(base_path=RAW_DATA_DIR)
+    extractor = Extractor(http_client=http_client, storage=storage)
     saved_files = extractor.extract()

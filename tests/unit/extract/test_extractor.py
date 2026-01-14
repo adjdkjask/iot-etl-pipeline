@@ -40,7 +40,7 @@ class TestExtractorGetTableFromPayload:
         """
         from extract.extractor import Extractor
 
-        extractor = Extractor()
+        extractor = Extractor(http_client=mock_client, storage=mock_storage)
         result = extractor._get_table_from_payload(sample_payload, "sensores")
 
         check.is_not_none(result, "Debe retornar datos cuando la tabla existe")
@@ -56,7 +56,7 @@ class TestExtractorGetTableFromPayload:
         """
         from extract.extractor import Extractor
 
-        extractor = Extractor()
+        extractor = Extractor(http_client=mock_client, storage=mock_storage)
         result = extractor._get_table_from_payload(sample_payload, "tabla_inexistente")
 
         check.is_none(result, "Debe retornar None cuando la tabla no existe")
@@ -71,7 +71,7 @@ class TestExtractorGetTableFromPayload:
         """
         from extract.extractor import Extractor
 
-        extractor = Extractor()
+        extractor = Extractor(http_client=mock_client, storage=mock_storage)
         result = extractor._get_table_from_payload({}, "sensores")
 
         check.is_none(result, "Debe retornar None cuando no hay tablas")
@@ -103,7 +103,7 @@ class TestExtractorExtract:
         mock_storage.save.return_value = Path("/tmp/sensores/file.parquet")
         mock_storage_class.return_value = mock_storage
 
-        extractor = Extractor()
+        extractor = Extractor(http_client=mock_client, storage=mock_storage)
         result = extractor.extract()
 
         check.is_instance(result, dict, "Debe retornar un diccionario")
@@ -132,7 +132,7 @@ class TestExtractorExtract:
         mock_storage.save.return_value = Path("/tmp/test.parquet")
         mock_storage_class.return_value = mock_storage
 
-        extractor = Extractor()
+        extractor = Extractor(http_client=mock_client, storage=mock_storage)
         extractor.extract()
 
         check.equal(
@@ -162,7 +162,7 @@ class TestExtractorExtract:
         mock_storage.save.return_value = Path("/tmp/test.parquet")
         mock_storage_class.return_value = mock_storage
 
-        extractor = Extractor()
+        extractor = Extractor(http_client=mock_client, storage=mock_storage)
         result = extractor.extract()
 
         check.equal(len(result), 1, "Solo debe guardar tablas que existen")
