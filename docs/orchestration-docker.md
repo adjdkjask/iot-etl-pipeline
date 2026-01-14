@@ -34,8 +34,13 @@ docker-compose up -d
 
 # 3. Acceder a la UI
 #    URL: http://localhost:8080
-#    Usuario: admin
-#    Password: admin
+#    Usuario: admin (por defecto, cambiar en producción)
+#    Password: admin (por defecto, cambiar en producción)
+
+## Seguridad y buenas prácticas
+
+- Cambia las credenciales por defecto (`admin`/`admin`) y el secret key antes de exponer el sistema.
+- El servicio `airflow-scheduler` corre como root para poder usar Docker-in-Docker. En producción, considera alternativas más seguras.
 ```
 
 ## Comandos
@@ -102,7 +107,7 @@ Variables de entorno opcionales en `orchestration/docker-compose.yml`:
 | Variable | Descripción | Default |
 |----------|-------------|---------|
 | `ETL_IMAGE_NAME` | Imagen Docker ETL | `iot-etl-pipeline-etl:latest` |
-| `ETL_PROJECT_ROOT` | Ruta al proyecto en el host | Calculada automáticamente |
+| `ETL_PROJECT_ROOT` | Ruta al proyecto en el host | Obligatoria (definir en `.env`; ver `.env.example`) |
 
 ### Schedule
 
