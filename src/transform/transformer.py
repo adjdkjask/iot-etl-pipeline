@@ -3,6 +3,7 @@ Módulo orquestador del proceso de transformación.
 """
 
 from typing import Dict, Type
+from pathlib import Path
 
 from pyspark.sql import DataFrame
 
@@ -68,12 +69,21 @@ class Transformer:
         "shifts": "shift_id",
     }
 
-    def __init__(self, spark_io: SparkIO):
+    def __init__(
+        self,
+        spark_io: SparkIO,
+        raw_data_dir: Path,
+        processed_data_dir: Path,
+        output_data_dir: Path,
+    ):
         """
         Args:
             spark_io: Instancia de SparkIO para operaciones de lectura/escritura
         """
         self.spark_io = spark_io
+        self.raw_data_dir = raw_data_dir
+        self.processed_data_dir = processed_data_dir
+        self.output_data_dir = output_data_dir
 
     def transform(self) -> None:
         """
@@ -99,7 +109,7 @@ class Transformer:
 
         for table_name, id_column in self.TABLES.items():
             # Leer la versión más reciente de la tabla raw
-            df = self.spark_io.read_latest_parquet(table_name, RAW_DATA_DIR)
+            df = self.spark_io.read_latest_parquet(table_name, self.raw_data_dir)
             if df is None:
                 continue
 
@@ -112,7 +122,7 @@ class Transformer:
 
             # Guardar en processed con timestamp (permite versionado)
             self.spark_io.write_timestamped_parquet(
-                df_cleaned, PROCESSED_DATA_DIR / table_name
+                df_cleaned, self.processed_data_dir / table_name
             )
             cleaned[table_name] = df_cleaned
 
@@ -155,7 +165,7 @@ class Transformer:
 
         # Guardar cada dimensión en output
         for dim_name, df in dimensions.items():
-            self.spark_io.write_timestamped_parquet(df, OUTPUT_DATA_DIR / dim_name)
+            self.spark_io.write_timestamped_parquet(df, self.output_data_dir / dim_name)
 
         return dimensions
 
@@ -284,7 +294,9 @@ class Transformer:
 
         # Guardar cada fact en output
         for fact_name, df in facts.items():
-            self.spark_io.write_timestamped_parquet(df, OUTPUT_DATA_DIR / fact_name)
+            self.spark_io.write_timestamped_parquet(
+                df, self.output_data_dir / fact_name
+            )
 
         return facts
 
@@ -293,5 +305,7 @@ if __name__ == "__main__":
     from config.path_config import RAW_DATA_DIR, PROCESSED_DATA_DIR, OUTPUT_DATA_DIR
 
     spark_io = SparkIO(app_name="IoT_ETL_Transform")
-    transformer = Transformer(spark_io)
+    transformer = Transformer(
+        spark_io, RAW_DATA_DIR, PROCESSED_DATA_DIR, OUTPUT_DATA_DIR
+    )
     transformer.transform()

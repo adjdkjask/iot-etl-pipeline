@@ -4,6 +4,7 @@ Pruebas unitarias para clase Transformer.
 
 import pytest
 import pytest_check as check
+from pathlib import Path
 from unittest.mock import Mock, patch
 from pyspark.sql import SparkSession
 
@@ -71,7 +72,12 @@ class TestTransformerInit:
         """
         from transform.transformer import Transformer
 
-        transformer = Transformer(spark_io=mock_spark_io)
+        transformer = Transformer(
+            spark_io=mock_spark_io,
+            raw_data_dir=Path("raw"),
+            processed_data_dir=Path("processed"),
+            output_data_dir=Path("output"),
+        )
 
         check.equal(transformer.spark_io, mock_spark_io)
 
@@ -81,7 +87,12 @@ class TestTransformerInit:
         """
         from transform.transformer import Transformer
 
-        transformer = Transformer(spark_io=mock_spark_io)
+        transformer = Transformer(
+            spark_io=mock_spark_io,
+            raw_data_dir=Path("raw"),
+            processed_data_dir=Path("processed"),
+            output_data_dir=Path("output"),
+        )
 
         check.is_true(hasattr(transformer, "CLEANERS"))
         check.is_true(len(transformer.CLEANERS) > 0)
@@ -92,7 +103,12 @@ class TestTransformerInit:
         """
         from transform.transformer import Transformer
 
-        transformer = Transformer(spark_io=mock_spark_io)
+        transformer = Transformer(
+            spark_io=mock_spark_io,
+            raw_data_dir=Path("raw"),
+            processed_data_dir=Path("processed"),
+            output_data_dir=Path("output"),
+        )
 
         check.is_true(hasattr(transformer, "TABLES"))
         check.is_true(len(transformer.TABLES) > 0)
@@ -115,7 +131,12 @@ class TestTransformerCleanTables:
         )
         mock_spark_io.write_timestamped_parquet = Mock()
 
-        transformer = Transformer(spark_io=mock_spark_io)
+        transformer = Transformer(
+            spark_io=mock_spark_io,
+            raw_data_dir=Path("raw"),
+            processed_data_dir=Path("processed"),
+            output_data_dir=Path("output"),
+        )
         result = transformer._clean_tables()
 
         check.is_instance(result, dict)
@@ -129,7 +150,12 @@ class TestTransformerCleanTables:
         mock_spark_io.read_latest_parquet = Mock(return_value=None)
         mock_spark_io.write_timestamped_parquet = Mock()
 
-        transformer = Transformer(spark_io=mock_spark_io)
+        transformer = Transformer(
+            spark_io=mock_spark_io,
+            raw_data_dir=Path("raw"),
+            processed_data_dir=Path("processed"),
+            output_data_dir=Path("output"),
+        )
         result = transformer._clean_tables()
 
         check.equal(len(result), 0, "No debe haber tablas procesadas")
@@ -151,7 +177,12 @@ class TestTransformerCleanTables:
         mock_spark_io.read_latest_parquet = Mock(side_effect=mock_read)
         mock_spark_io.write_timestamped_parquet = Mock()
 
-        transformer = Transformer(spark_io=mock_spark_io)
+        transformer = Transformer(
+            spark_io=mock_spark_io,
+            raw_data_dir=Path("raw"),
+            processed_data_dir=Path("processed"),
+            output_data_dir=Path("output"),
+        )
         result = transformer._clean_tables()
 
         # Verificar que se procesó alerts
@@ -181,7 +212,12 @@ class TestTransformerCleanTables:
         mock_spark_io.read_latest_parquet = Mock(side_effect=mock_read)
         mock_spark_io.write_timestamped_parquet = Mock()
 
-        transformer = Transformer(spark_io=mock_spark_io)
+        transformer = Transformer(
+            spark_io=mock_spark_io,
+            raw_data_dir=Path("raw"),
+            processed_data_dir=Path("processed"),
+            output_data_dir=Path("output"),
+        )
         transformer._clean_tables()
 
         check.equal(
@@ -202,7 +238,12 @@ class TestTransformerTransform:
 
         mock_spark_io.read_latest_parquet = Mock(return_value=None)
 
-        transformer = Transformer(spark_io=mock_spark_io)
+        transformer = Transformer(
+            spark_io=mock_spark_io,
+            raw_data_dir=Path("raw"),
+            processed_data_dir=Path("processed"),
+            output_data_dir=Path("output"),
+        )
 
         with patch.object(transformer, "_clean_tables", return_value={}) as mock_clean:
             transformer.transform()
