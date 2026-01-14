@@ -40,6 +40,39 @@ WORKDIR /app
 # Copy virtual environment from builder
 COPY --from=builder /app/.venv .venv
 
+# Remove unnecessary Spark JARs to reduce image size
+# Keep only what's needed for local Spark SQL/DataFrame operations
+RUN rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/hadoop-azure-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/hadoop-aws-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/hadoop-aliyun-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/hadoop-cloud-storage-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/aws-java-sdk-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/azure-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/jetty-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/kubernetes-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/okhttp-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/okio-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/wildfly-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/jackson-dataformat-cbor-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/jcl-over-slf4j-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/spark-kubernetes_* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/spark-ganglia-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/spark-mllib_* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/spark-streaming_* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/spark-graphx_* \
+    # Large JARs not needed for basic DataFrame/SQL operations
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/rocksdbjni-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/spark-connect* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/breeze* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/spire* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/scala-compiler-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/derby-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/derbytools-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/derbyclient-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/derbyshared-* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/spark-streaming_* \
+    && rm -rf .venv/lib/python3.13/site-packages/pyspark/jars/spark-graphx_*
+
 # Copy application code and tests
 COPY --chown=appuser:appuser ./src ./src
 COPY --chown=appuser:appuser ./tests ./tests
