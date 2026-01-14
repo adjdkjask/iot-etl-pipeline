@@ -109,3 +109,12 @@ class Loader:
         """
         table = self._read_table(table_name)
         return self.writer.write(table, table_name)
+
+
+if __name__ == "__main__":
+    from load.writers.csv_writer import CSVWriter
+    from config.path_config import OUTPUT_DATA_DIR, EXPORTS_DIR
+
+    writer = CSVWriter(base_path=EXPORTS_DIR)
+    loader = Loader(source_path=OUTPUT_DATA_DIR, writer=writer)
+    results = loader.load()

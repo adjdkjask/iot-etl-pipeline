@@ -2,29 +2,11 @@
 Módulo con lógica de extracción de API.
 """
 
-import os
 from pathlib import Path
-from dotenv import load_dotenv
 from typing import Dict, Any, List, Optional
 
 from extract.storage import RawStorage
 from extract.http_client import RequestsHttpClient
-
-# Configuración de la API
-load_dotenv()
-USER_EMAIL = os.getenv("USER_EMAIL")
-API_BASE_URL = os.getenv("API_BASE_URL")
-API_KEY = os.getenv("API_KEY")
-DATASET_TYPE = os.getenv("DATASET_TYPE")
-ROWS = os.getenv("ROWS")
-API_URL = (
-    f"{API_BASE_URL}?email={USER_EMAIL}&key={API_KEY}&type={DATASET_TYPE}&rows={ROWS}"
-)
-
-# Configuración de guardado
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-DATA_DIR = PROJECT_ROOT / "data"
-RAW_DATA_DIR = DATA_DIR / "raw"
 
 
 class Extractor:
@@ -34,7 +16,7 @@ class Extractor:
     """
 
     def __init__(self):
-        self.client = RequestsHttpClient(url=API_URL)
+        self.client = RequestsHttpClient(url=get_api_url())
         self.storage = RawStorage(base_path=RAW_DATA_DIR)
 
     def extract(self) -> Dict[str, Path]:
@@ -64,3 +46,10 @@ class Extractor:
         """
         tables = payload.get("tables", {})
         return tables.get(table_name)
+
+
+if __name__ == "__main__":
+    from config.path_config import RAW_DATA_DIR, get_api_url
+
+    extractor = Extractor()
+    saved_files = extractor.extract()

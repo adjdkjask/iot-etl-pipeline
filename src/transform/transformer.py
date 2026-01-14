@@ -2,7 +2,6 @@
 Módulo orquestador del proceso de transformación.
 """
 
-from pathlib import Path
 from typing import Dict, Type
 
 from pyspark.sql import DataFrame
@@ -33,14 +32,6 @@ from transform.builders.facts import (
     build_fact_maintenance,
     build_fact_alerts,
 )
-
-
-# Configuración de guardado
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-DATA_DIR = PROJECT_ROOT / "data"
-RAW_DATA_DIR = DATA_DIR / "raw"
-PROCESSED_DATA_DIR = DATA_DIR / "processed"
-OUTPUT_DATA_DIR = DATA_DIR / "output"
 
 
 class Transformer:
@@ -296,3 +287,11 @@ class Transformer:
             self.spark_io.write_timestamped_parquet(df, OUTPUT_DATA_DIR / fact_name)
 
         return facts
+
+
+if __name__ == "__main__":
+    from config.path_config import RAW_DATA_DIR, PROCESSED_DATA_DIR, OUTPUT_DATA_DIR
+
+    spark_io = SparkIO(app_name="IoT_ETL_Transform")
+    transformer = Transformer(spark_io)
+    transformer.transform()
